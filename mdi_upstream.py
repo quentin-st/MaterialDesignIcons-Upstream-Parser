@@ -41,7 +41,8 @@ def fetch_meta():
             'name': icon['name'],
             'codepoint': icon['codepoint'],
             'aliases': icon['aliases'],
-            'author': icon.get('author', None)  # Author is not available right now
+            'author': icon.get('author', None),  # Author is not available right now
+            'version': icon.get('version', None)  # Same
         })
 
     return data
