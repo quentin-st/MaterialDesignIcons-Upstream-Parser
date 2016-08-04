@@ -3,23 +3,31 @@
 
 import urllib.request
 import re
+import json
 
-meta_upstream_uri = 'https://raw.githubusercontent.com/Templarian/MaterialDesign-Webfont/master/scss/_variables.scss'
+upstream_version_url = 'https://raw.githubusercontent.com/Templarian/MaterialDesign-Webfont/master/scss/_variables.scss'
+upstream_meta_url = 'http://cdn.materialdesignicons.com/{}/meta.json'
 
 
-def fetch_meta():
+def get_latest_version():
     # Download & parse upstream meta file
-    response = urllib.request.urlopen(meta_upstream_uri)
+    response = urllib.request.urlopen(upstream_version_url)
     _variables = response.read().decode('utf-8')
-
-    icons_regex = re.compile('    "(.*)": (F[A-F0-9]*),?')
-    icons_matches = icons_regex.findall(_variables)
 
     version_regex = re.compile('\$mdi-version:\s*"(.*)" *')
     version_matches = version_regex.findall(_variables)
-    version = version_matches[0]
+    return version_matches[0]
 
-    if len(icons_matches) == 0:
+
+def fetch_meta():
+    version = get_latest_version()
+    meta_url = upstream_meta_url.format(version)
+
+    # Download & parse upstream meta file
+    response = urllib.request.urlopen(meta_url)
+    icons = json.loads(response.read().decode('utf-8'))
+
+    if len(icons) == 0:
         return None
 
     data = {
@@ -27,10 +35,13 @@ def fetch_meta():
         'icons': []
     }
 
-    for match in icons_matches:
+    for icon in icons:
         data['icons'].append({
-            'name': match[0],
-            'codepoint': match[1]
+            'id': icon['id'],
+            'name': icon['name'],
+            'codepoint': icon['codepoint'],
+            'aliases': icon['aliases'],
+            'author': icon.get('author', None)  # Author is not available right now
         })
 
     return data
