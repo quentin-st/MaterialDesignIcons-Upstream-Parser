@@ -19,8 +19,10 @@ def get_latest_version():
     return version_matches[0]
 
 
-def fetch_meta():
-    version = get_latest_version()
+def fetch_meta(version=None):
+    if version is None:
+        version = get_latest_version()
+
     meta_url = upstream_meta_url.format(version)
 
     # Download & parse upstream meta file
