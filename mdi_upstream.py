@@ -19,7 +19,13 @@ def get_latest_version():
     return version_matches[0]
 
 
-def fetch_meta(version=None):
+def fetch_meta(version=None, include_blank=False):
+    """Parses upstream meta and returns it as a dictionary.
+
+    Arguments:
+    version -- If None, we'll try to determine the last version
+    include_blank -- If True, we'll include the mdi-blank icon
+    """
     if version is None:
         version = get_latest_version()
 
@@ -43,8 +49,18 @@ def fetch_meta(version=None):
             'name': icon['name'],
             'codepoint': icon['codepoint'],
             'aliases': icon['aliases'],
-            'author': icon.get('author', None),  # Author is not available right now
-            'version': icon.get('version', None)  # Same
+            'author': icon.get('author', None),
+            'version': icon.get('version', None)
+        })
+
+    if include_blank:
+        data['icons'].append({
+            'id': None,
+            'name': 'blank',
+            'codepoint': 'F68C',
+            'aliases': [],
+            'author': 'Austin Andrews',
+            'version': '1.7.12'
         })
 
     return data
