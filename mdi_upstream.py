@@ -49,6 +49,7 @@ def fetch_meta(version=None, include_blank=False):
             'name': icon['name'],
             'codepoint': icon['codepoint'],
             'aliases': icon['aliases'],
+            'tags': icon['tags'],
             'author': icon.get('author', None),
             'version': icon.get('version', None)
         })
@@ -57,6 +58,7 @@ def fetch_meta(version=None, include_blank=False):
         data['icons'].append({
             'id': None,
             'name': 'blank',
+            'tags': ['empty', 'transparent'],
             'codepoint': 'F68C',
             'aliases': [],
             'author': 'Austin Andrews',
