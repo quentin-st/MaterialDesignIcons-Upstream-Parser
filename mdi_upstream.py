@@ -49,7 +49,7 @@ def fetch_meta(version=None, include_blank=False):
             'name': icon['name'],
             'codepoint': icon['codepoint'],
             'aliases': icon['aliases'],
-            'tags': icon['tags'],
+            'tags': icon['tags'] if 'tags' in icon else [],
             'author': icon.get('author', None),
             'version': icon.get('version', None)
         })
